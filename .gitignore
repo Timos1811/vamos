@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+
+# קובץ מקור זמני למפה — נמחק אחרי הרצת tools-build-map.js
+ne50.geojson
+ne_50m_admin_0_countries.geojson
