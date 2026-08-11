@@ -2,7 +2,7 @@
    VAMOS — לוגיקת האתר
    1. תפריט מדינות + תפריט מובייל
    2. מפת דרום אמריקה אינטראקטיבית (SVG, נבנית מ-map-data.js)
-   3. פאנל כתבות לפי מדינה
+   3. ספירת מידע לפי מדינה
    4. Reveal on scroll
    ניווט: כל הקישורים נבנים יחסית ל-BASE (data-base על <body>).
    ========================================================================== */
@@ -20,7 +20,7 @@
     return ARTICLES.filter(function (a) { return a.country === slug; }).length;
   }
   function countLabel(n) {
-    return n === 1 ? 'כתבה אחת' : n + ' כתבות';
+    return n === 1 ? 'פריט מידע אחד' : n + ' פריטי מידע';
   }
 
   /* ---------------------------------------------------------------- nav ---- */
@@ -81,7 +81,7 @@
     var svg = el('svg', {
       viewBox: '0 0 ' + data.width + ' ' + data.height,
       role: 'img',
-      'aria-label': 'מפה אינטראקטיבית של דרום ומרכז אמריקה — לחצו על מדינה כדי לראות את הכתבות שלה'
+      'aria-label': 'מפה אינטראקטיבית של דרום ומרכז אמריקה — לחצו על מדינה כדי לראות את המידע שלה'
     });
 
     // context countries (not clickable)
@@ -98,7 +98,7 @@
         'data-slug': slug,
         tabindex: '0',
         role: 'link',
-        'aria-label': c.he + ' — ' + (n ? countLabel(n) : 'עוד אין כתבות')
+        'aria-label': c.he + ' — ' + (n ? countLabel(n) : 'עוד אין מידע')
       });
       var title = el('title');
       title.textContent = c.he + (n ? ' · ' + countLabel(n) : '');

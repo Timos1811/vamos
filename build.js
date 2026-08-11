@@ -18,7 +18,7 @@ const path = require('path');
 const SITE = {
   url: 'https://www.vamos.co.il',           // ← הכתובת הסופית של האתר (בלי / בסוף)
   name: 'VAMOS',
-  tagline: 'כל קבוצות המטיילים במקום אחד',
+  tagline: 'קהילת המטיילים של דרום אמריקה',
   description: 'מדריכים, מסלולים וטיפים לטיול בדרום ובמרכז אמריקה — ארגנטינה, צ׳ילה, פרו, בוליביה, קולומביה, אקוודור, ברזיל, אורוגוואי, פנמה, קוסטה ריקה, ניקרגואה, גואטמלה ומקסיקו.',
   whatsapp: 'https://chat.whatsapp.com/',   // ← לינק לקבוצת/ערוץ הוואטסאפ
   lang: 'he',
@@ -81,7 +81,7 @@ function header(base, active) {
 ${menu}
           </ul>
         </li>
-        <li><a class="nav-link" href="${base}index.html#latest">כתבות</a></li>
+        <li><a class="nav-link" href="${base}index.html#latest">מידע</a></li>
         <li><a class="nav-link" href="${base}about.html">עלינו</a></li>
         <li><a class="btn btn-wa" style="padding:.5rem 1rem;font-size:.9rem" href="${SITE.whatsapp}" target="_blank" rel="noopener">קבוצת הוואטסאפ</a></li>
       </ul>
@@ -95,7 +95,7 @@ ${menu}
 <div class="drawer" id="mobile-drawer">
   <ul class="drawer-main">
     <li><a href="${base}index.html#map">🗺️ המפה האינטראקטיבית</a></li>
-    <li><a href="${base}index.html#latest">📰 כל הכתבות</a></li>
+    <li><a href="${base}index.html#latest">📰 כל המידע</a></li>
     <li><a href="${base}about.html">🎒 עלינו</a></li>
     <li><a href="${SITE.whatsapp}" target="_blank" rel="noopener">💬 קבוצת הוואטסאפ</a></li>
   </ul>
@@ -231,7 +231,7 @@ function countryPage(c) {
 
 <main id="main">
 
-  <section class="country-hero">
+  <section class="country-hero${c.heroImage ? ' has-photo' : ''}"${c.heroImage ? ` style="background-image:linear-gradient(180deg, rgba(10,10,15,.55), rgba(10,10,15,.75)), url('${base}${c.heroImage}')"` : ''}>
     <div class="wrap">
       <nav class="breadcrumb" aria-label="מיקום">
         <a href="${base}index.html">דף הבית</a><span class="sep">›</span>
@@ -249,30 +249,12 @@ function countryPage(c) {
     </div>
   </section>
 
-  <section class="section" style="padding-top:1.5rem">
-    <div class="wrap" style="max-width:70ch">
-${c.intro.map((p) => `      <p>${esc(p)}</p>`).join('\n')}
-    </div>
-  </section>
-
-  <section class="section" style="padding-top:0">
+  <section class="section" id="articles" style="padding-top:1.5rem">
     <div class="wrap">
       <div class="section-head">
-        <div class="kicker">מה לא מפספסים</div>
-        <h2>הדגשים של ${c.he}</h2>
-      </div>
-      <ul class="highlights">
-${c.highlights.map((h) => `        <li><span class="h-name">${esc(h.name)}</span><span class="h-desc">${esc(h.desc)}</span></li>`).join('\n')}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section" id="articles" style="padding-top:1rem">
-    <div class="wrap">
-      <div class="section-head">
-        <div class="kicker">כל הכתבות</div>
-        <h2>כתבות על ${c.he}</h2>
-        <p>${list.length ? `${list.length === 1 ? 'כתבה אחת באתר' : list.length + ' כתבות באתר'}` : 'הכתבות הראשונות בדרך — בינתיים אפשר לעבור למפה ולראות יעדים אחרים.'}</p>
+        <div class="kicker">כל המידע</div>
+        <h2>כל מה שצריך לדעת ב${c.he}</h2>
+        <p>${list.length ? `${list.length === 1 ? 'פריט מידע אחד באתר' : list.length + ' פריטי מידע באתר'}` : 'המידע הראשון בדרך — בינתיים אפשר לעבור למפה ולראות יעדים אחרים.'}</p>
       </div>
 <!-- BUILD:list -->
 <!-- /BUILD:list -->
@@ -345,7 +327,7 @@ function run() {
     let html = countryPage(c);
     html = inject(html, 'header', header('../', c.slug));
     html = inject(html, 'footer', footer('../'));
-    html = inject(html, 'list', cardGrid(byCountry(c.slug), '../', `עוד לא פרסמנו כתבות על ${c.he}. חוזרים לכאן בקרוב — או שנפגשים בקבוצת הוואטסאפ.`));
+    html = inject(html, 'list', cardGrid(byCountry(c.slug), '../', `עוד לא פרסמנו מידע על ${c.he}. חוזרים לכאן בקרוב — או שנפגשים בקבוצת הוואטסאפ.`));
     fs.writeFileSync(path.join(dir, c.slug + '.html'), html, 'utf8');
     n++;
   }
@@ -358,7 +340,7 @@ function run() {
     html = inject(html, 'header', header('', null));
     html = inject(html, 'footer', footer(''));
     const latest = ARTICLES.slice().sort((a, b) => String(b.date || '').localeCompare(String(a.date || '')));
-    html = inject(html, 'latest', cardGrid(latest.slice(0, 9), '', 'עוד אין כתבות באתר — הראשונה תעלה בקרוב. בינתיים אפשר לשוטט במפה ולבחור יעד.'));
+    html = inject(html, 'latest', cardGrid(latest.slice(0, 9), '', 'עוד אין מידע באתר — הראשון יעלה בקרוב. בינתיים אפשר לשוטט במפה ולבחור יעד.'));
     html = inject(html, 'chips', COUNTRIES.map((c) =>
       `        <li><a class="chip" href="countries/${c.slug}.html">${c.flag} ${c.he} <span class="n">${byCountry(c.slug).length}</span></a></li>`).join('\n'));
     if (html !== before) { fs.writeFileSync(file, html, 'utf8'); n++; }
@@ -373,7 +355,7 @@ function run() {
     html = inject(html, 'footer', footer('../'));
     if (meta) {
       const related = byCountry(meta.country).filter((a) => a.slug !== slug).slice(0, 3);
-      html = inject(html, 'related', cardGrid(related, '../', 'עוד כתבות בדרך.'));
+      html = inject(html, 'related', cardGrid(related, '../', 'עוד מידע בדרך.'));
     }
     if (html !== before) { fs.writeFileSync(file, html, 'utf8'); n++; }
     if (!meta) console.warn(`  ⚠  ${path.basename(file)} — לא רשום ב-assets/js/articles.js`);
@@ -384,7 +366,7 @@ function run() {
   fs.writeFileSync(path.join(ROOT, 'robots.txt'),
     `User-agent: *\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`, 'utf8');
 
-  console.log(`✓ VAMOS build — ${COUNTRIES.length} מדינות, ${ARTICLES.length} כתבות, ${n} קבצים עודכנו`);
+  console.log(`✓ VAMOS build — ${COUNTRIES.length} מדינות, ${ARTICLES.length} פריטי מידע, ${n} קבצים עודכנו`);
 }
 
 run();
