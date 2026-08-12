@@ -514,7 +514,6 @@ p { margin: 0 0 1.1em; }
   fill: var(--ink); paint-order: stroke; stroke: rgba(255, 255, 255, .85); stroke-width: 4px;
   text-anchor: middle; pointer-events: none; opacity: .92;
 }
-.map-label.is-small { font-size: 15px; }
 .map-leader { stroke: var(--ink); stroke-width: 1.2; opacity: .45; }
 .map-count {
   font-family: 'Heebo', sans-serif; font-size: 14px; font-weight: 700;
