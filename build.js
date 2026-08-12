@@ -115,7 +115,9 @@ function footer(base) {
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <h4>${SITE.name}</h4>
+        <a class="footer-brand" href="${base}index.html" aria-label="${SITE.name} — דף הבית">
+          <img src="${base}assets/img/logo.png" alt="${SITE.name}" class="footer-logo">
+        </a>
         <p style="font-size:.92rem;max-width:38ch">${SITE.tagline}. מדריכים, מסלולים וטיפים מהשטח לטיול הגדול בדרום ובמרכז אמריקה.</p>
         <a class="btn btn-wa" href="${SITE.whatsapp}" target="_blank" rel="noopener">הצטרפו לקבוצה</a>
       </div>

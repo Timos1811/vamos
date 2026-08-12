@@ -301,9 +301,16 @@ p { margin: 0 0 1.1em; }
 .header-bar {
   height: var(--bar-h);
   display: flex; align-items: center; gap: 1.2rem;
+  position: relative;
 }
 .brand { display: flex; align-items: center; gap: .6rem; flex-shrink: 0; }
-.brand-logo { height: 46px; width: auto; }
+.brand-logo { height: 58px; width: auto; }
+/* הלוגו ממורכז רק במסכים רחבים מספיק שלא יתנגש בניווט (נבדק ידנית) */
+@media (min-width: 1100px) {
+  .brand {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  }
+}
 .brand-fallback { display: flex; align-items: center; gap: .55rem; }
 .brand-fallback[hidden] { display: none; }
 .brand-mark { width: 38px; height: 38px; flex: none; }
@@ -457,6 +464,19 @@ p { margin: 0 0 1.1em; }
   padding: 1rem;
   overflow: hidden;
 }
+.map-tip {
+  position: absolute; z-index: 20; pointer-events: none; top: 0; left: 0;
+  background: var(--paper); border: 1px solid var(--line); border-radius: 12px;
+  box-shadow: var(--shadow-md); padding: .6rem .8rem; max-width: 220px;
+  display: flex; align-items: flex-start; gap: .55rem;
+  opacity: 0; transform: scale(.96); transform-origin: top left;
+  transition: opacity .16s var(--ease-out), transform .16s var(--ease-out);
+}
+.map-tip.is-visible { opacity: 1; transform: scale(1); }
+.map-tip-flag { font-size: 1.3rem; line-height: 1; flex: none; margin-top: .1rem; }
+.map-tip-body { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+.map-tip-body strong { font-family: 'Secular One', sans-serif; font-size: .95rem; color: var(--ink); }
+.map-tip-body span { font-size: .82rem; color: var(--ink-soft); line-height: 1.35; }
 .map-stage::before {
   /* subtle paper/ocean texture */
   content: ''; position: absolute; inset: 0; pointer-events: none;
@@ -464,7 +484,7 @@ p { margin: 0 0 1.1em; }
     radial-gradient(120% 80% at 20% 0%, rgba(46, 139, 122, .06), transparent 60%),
     radial-gradient(90% 70% at 100% 100%, rgba(245, 154, 35, .07), transparent 60%);
 }
-#vamos-map { position: relative; width: 100%; height: auto; max-height: min(80vh, 860px); }
+#vamos-map { position: relative; width: 100%; height: auto; max-height: min(80vh, 860px); -webkit-tap-highlight-color: transparent; }
 #vamos-map svg { width: 100%; height: auto; max-height: min(80vh, 860px); margin-inline: auto; overflow: visible; }
 
 .map-ctx { fill: #E9E3D8; stroke: var(--cream); stroke-width: 1.2; }
@@ -477,11 +497,16 @@ p { margin: 0 0 1.1em; }
   transform-box: fill-box;
   transform-origin: center;
   transition: fill .25s var(--ease-out), transform .35s var(--ease-out), filter .25s var(--ease-out);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 .country:hover { fill: var(--orange); transform: translateY(-4px) scale(1.012); filter: drop-shadow(0 8px 14px rgba(20, 32, 28, .22)); }
 .country.is-active { fill: var(--orange-2); filter: drop-shadow(0 8px 16px rgba(224, 124, 21, .35)); }
 .country.is-empty { fill: #8FC0B4; }
 .country.is-empty:hover { fill: var(--teal-2); }
+.country:focus { outline: none; }
 .country:focus-visible { outline: none; stroke: var(--ink); stroke-width: 2.4; }
 
 .map-label {
@@ -629,6 +654,11 @@ p { margin: 0 0 1.1em; }
 
 .site-footer { background: var(--ink); color: rgba(253, 247, 238, .78); padding: 2.6rem 0 1.6rem; margin-top: 3rem; }
 .footer-grid { display: grid; gap: 2rem; grid-template-columns: 1.4fr 1fr 1fr; }
+.footer-brand {
+  display: inline-flex; background: var(--cream); border-radius: 14px;
+  padding: .5rem .8rem; margin-bottom: 1rem;
+}
+.footer-logo { height: 44px; width: auto; display: block; }
 .site-footer h4 { color: #fff; font-family: 'Heebo', sans-serif; font-weight: 700; font-size: .95rem; margin-bottom: .8rem; }
 .site-footer ul { list-style: none; padding: 0; margin: 0; display: grid; gap: .4rem; font-size: .92rem; }
 .site-footer a { transition: color .2s var(--ease-out); }
@@ -657,7 +687,7 @@ p { margin: 0 0 1.1em; }
   .nav-list, .has-menu { display: none; }
   .burger { display: inline-flex; }
   .nav { margin-inline-start: auto; }
-  .brand-logo { height: 40px; }
+  .brand-logo { height: 46px; }
   .footer-grid { grid-template-columns: 1fr; }
   .cta-band { flex-direction: column; align-items: flex-start; }
 }

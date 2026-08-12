@@ -144,6 +144,52 @@
       var p = e.target.closest ? e.target.closest('.country') : null;
       if (p) { e.preventDefault(); goTo(p.getAttribute('data-slug')); }
     });
+
+    // תצוגה מקדימה בריחוף — רק במכשירים עם עכבר אמיתי (לא נוגע בהתנהגות הטאץ')
+    if (window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+      var stage = host.closest('.map-stage') || host.parentElement;
+      var tip = document.createElement('div');
+      tip.className = 'map-tip';
+      stage.appendChild(tip);
+
+      var tipVisible = false;
+      var lastSlug = null;
+
+      function moveTip(evt) {
+        if (!tipVisible) return;
+        var r = stage.getBoundingClientRect();
+        var tw = tip.offsetWidth, th = tip.offsetHeight;
+        var x = evt.clientX - r.left + 16;
+        var y = evt.clientY - r.top - th - 14;
+        x = Math.max(6, Math.min(x, r.width - tw - 6));
+        y = Math.max(6, Math.min(y, r.height - th - 6));
+        tip.style.left = x + 'px';
+        tip.style.top = y + 'px';
+      }
+      function showTip(slug, evt) {
+        var c = bySlug[slug];
+        if (!c) return;
+        tip.innerHTML = '<span class="map-tip-flag">' + c.flag + '</span>' +
+          '<span class="map-tip-body"><strong>' + c.he + '</strong><span>' + (c.tagline || '') + '</span></span>';
+        tipVisible = true;
+        tip.classList.add('is-visible');
+        moveTip(evt);
+      }
+      function hideTip() {
+        tipVisible = false;
+        lastSlug = null;
+        tip.classList.remove('is-visible');
+      }
+
+      svg.addEventListener('mousemove', function (e) {
+        var p = e.target.closest ? e.target.closest('.country') : null;
+        if (!p) { if (lastSlug) hideTip(); return; }
+        var slug = p.getAttribute('data-slug');
+        if (slug !== lastSlug) { lastSlug = slug; showTip(slug, e); }
+        else { moveTip(e); }
+      });
+      svg.addEventListener('mouseleave', hideTip);
+    }
   }
 
   /* ------------------------------------------------------------- reveal ---- */
