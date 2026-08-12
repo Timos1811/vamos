@@ -209,6 +209,7 @@ function countryPage(c) {
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
 <link rel="canonical" href="${canonical}">
+<meta name="robots" content="noindex, nofollow">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="he_IL">
 <meta property="og:site_name" content="${SITE.name}">
@@ -363,8 +364,10 @@ function run() {
 
   // 3. sitemap + robots
   fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), sitemap(), 'utf8');
+  // ⚠️ שלב סטייג'ינג: האתר לא מיועד לאינדוקס עדיין — לפני עלייה לאוויר באמת,
+  // מחליפים בחזרה ל: `User-agent: *\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`
   fs.writeFileSync(path.join(ROOT, 'robots.txt'),
-    `User-agent: *\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`, 'utf8');
+    `User-agent: *\nDisallow: /\n`, 'utf8');
 
   console.log(`✓ VAMOS build — ${COUNTRIES.length} מדינות, ${ARTICLES.length} פריטי מידע, ${n} קבצים עודכנו`);
 }
